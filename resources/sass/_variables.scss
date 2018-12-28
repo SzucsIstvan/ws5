@@ -1,0 +1,44 @@
+
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+$font-family-sans-serif: 'Archivo', sans-serif;;
+$font-size-base: .875rem;
+$line-height-base: 1.42861;
+
+$spacer: $font-size-base;
+
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66D9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+$paragraph-margin-bottom: $font-size-base;
+
+$grid-gutter-width: 1.25rem;
+$card-spacer-x: 0.625rem;
+$card-spacer-y: 0.312rem;
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+
+$input-btn-padding-y:         .25rem !default;
+$input-btn-padding-x:         .5rem !default;
+
+$input-btn-padding-y-sm:      .167rem !default;
+$input-btn-padding-x-sm:      .335rem !default;
+
+$input-btn-padding-y-lg:      .375rem !default;
+$input-btn-padding-x-lg:      .75rem !default;
+
+$nav-link-padding-y: .25rem !default;
+$nav-link-padding-x: .5rem !default;

@@ -24,17 +24,17 @@ const routes = [
 const router = new VueRouter({
     mode: 'history',
     routes, // short for `routes: routes`
-    // scrollBehavior (to, from, savedPosition) {
-    //     // return new Promise((resolve, reject) => {
-    //     //     setTimeout(() => {
-    //     //         if (savedPosition) {
-    //     //             resolve(savedPosition);
-    //     //         } else {
-    //     //             resolve({ x: 0, y: 0 })
-    //     //         }
-    //     //     }, 500);
-    //     // })
-    // }
+    scrollBehavior (to, from, savedPosition) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (savedPosition) {
+                    resolve(savedPosition);
+                } else {
+                    resolve({ x: 0, y: 0 })
+                }
+            }, 500);
+        })
+    }
 });
 
 router.beforeEach((to, from, next) => {

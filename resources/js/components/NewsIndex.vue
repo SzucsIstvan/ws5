@@ -1,4 +1,5 @@
 <template>
+
     <div v-if="!loading">
         <h2>News</h2>
         <div class="card">
@@ -22,10 +23,13 @@
 
                 </ul>
             </div>
-            <news-item-line :news="news" v-if="view === 'line'"></news-item-line>
-            <news-item-brick :news="news" v-if="view === 'brick'"></news-item-brick>
-            <news-item-magazine :news="news" v-if="view === 'magazine'"></news-item-magazine>
+            <transition name="slide-fade" mode="in-out">
+                <news-item-line :news="news" v-if="view === 'line'"></news-item-line>
+                <news-item-brick :news="news" v-if="view === 'brick'"></news-item-brick>
+                <news-item-magazine :news="news" v-if="view === 'magazine'"></news-item-magazine>
+            </transition>
         </div>
+
     </div>
 </template>
 <script>

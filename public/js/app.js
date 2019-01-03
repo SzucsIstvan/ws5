@@ -1840,6 +1840,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -37448,17 +37452,24 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm.view === "line"
-              ? _c("news-item-line", { attrs: { news: _vm.news } })
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.view === "brick"
-              ? _c("news-item-brick", { attrs: { news: _vm.news } })
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.view === "magazine"
-              ? _c("news-item-magazine", { attrs: { news: _vm.news } })
-              : _vm._e()
+            _c(
+              "transition",
+              { attrs: { name: "slide-fade", mode: "in-out" } },
+              [
+                _vm.view === "line"
+                  ? _c("news-item-line", { attrs: { news: _vm.news } })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.view === "brick"
+                  ? _c("news-item-brick", { attrs: { news: _vm.news } })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.view === "magazine"
+                  ? _c("news-item-magazine", { attrs: { news: _vm.news } })
+                  : _vm._e()
+              ],
+              1
+            )
           ],
           1
         )
@@ -53025,19 +53036,22 @@ var routes = [{
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   mode: 'history',
-  routes: routes // short for `routes: routes`
-  // scrollBehavior (to, from, savedPosition) {
-  //     // return new Promise((resolve, reject) => {
-  //     //     setTimeout(() => {
-  //     //         if (savedPosition) {
-  //     //             resolve(savedPosition);
-  //     //         } else {
-  //     //             resolve({ x: 0, y: 0 })
-  //     //         }
-  //     //     }, 500);
-  //     // })
-  // }
-
+  routes: routes,
+  // short for `routes: routes`
+  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        if (savedPosition) {
+          resolve(savedPosition);
+        } else {
+          resolve({
+            x: 0,
+            y: 0
+          });
+        }
+      }, 500);
+    });
+  }
 });
 router.beforeEach(function (to, from, next) {
   // If this isn't an initial page load.

@@ -52570,15 +52570,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+ // const news = new ContentManager();
+// const newscontent = new ContentManager();
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var debug = "development" !== 'production';
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     viewType: _modules_viewType__WEBPACK_IMPORTED_MODULE_2__["default"],
-    news: _modules_content__WEBPACK_IMPORTED_MODULE_3__["default"],
-    newscontent: _modules_content__WEBPACK_IMPORTED_MODULE_3__["default"]
+    news: new _modules_content__WEBPACK_IMPORTED_MODULE_3__["ContentManager"](60),
+    newscontent: new _modules_content__WEBPACK_IMPORTED_MODULE_3__["ContentManager"](0)
   } // strict: debug,
   // plugins: debug ? [createLogger()] : []
 
@@ -52590,47 +52591,94 @@ var debug = "development" !== 'production';
 /*!***********************************************!*\
   !*** ./resources/js/store/modules/content.js ***!
   \***********************************************/
-/*! exports provided: default */
+/*! exports provided: ContentManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ({
-  namespaced: true,
-  state: {
-    content: {}
-  },
-  getters: {
-    contentByUrl: function contentByUrl(state) {
-      return function (url) {
-        if (typeof state.content[url] != "undefined") {
-          return state.content[url];
-        } else {
-          return {};
-        }
-      };
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContentManager", function() { return ContentManager; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/**
+ * Time in seconds
+ * @type {Number}
+ */
+var expirationTime = 60;
+var ContentManager =
+/*#__PURE__*/
+function () {
+  _createClass(ContentManager, [{
+    key: "getCurrenTimestamp",
+    value: function getCurrenTimestamp() {
+      return new Date().getTime();
     }
-  },
-  actions: {
-    getData: function getData(_ref, url) {
-      var state = _ref.state;
-      return new Promise(function (resolve, reject) {
-        if (typeof state.content[url] != "undefined") {
-          resolve(state.content[url]);
-        } else {
-          axios.get(url).then(function (response) {
-            if (response.status == 200) {
-              state.content[url] = response.data;
-              resolve(state.content[url]);
-            } else {
-              reject(response);
-            }
-          });
-        }
-      });
+  }, {
+    key: "expTimeInMilis",
+    value: function expTimeInMilis() {
+      return this.expirationTime * 1000;
     }
+  }, {
+    key: "isDataExpired",
+    value: function isDataExpired(timestamp) {
+      return !(timestamp + this.expTimeInMilis() >= this.getCurrenTimestamp());
+    }
+  }]);
+
+  function ContentManager(expTime) {
+    _classCallCheck(this, ContentManager);
+
+    var _this = this;
+
+    this.namespaced = true;
+
+    if (typeof expTime != "undefined" && parseInt(expTime) >= 0) {
+      this.expirationTime = expTime;
+    } else {
+      this.expirationTime = expirationTime;
+    }
+
+    this.state = {
+      content: {},
+      timestamps: {}
+    };
+    this.getters = {
+      contentByUrl: function contentByUrl(state) {
+        return function (url) {
+          if (typeof state.content[url] != "undefined") {
+            return state.content[url];
+          } else {
+            return {};
+          }
+        };
+      }
+    }, this.actions = {
+      getData: function getData(_ref, url) {
+        var state = _ref.state;
+        return new Promise(function (resolve, reject) {
+          if (typeof state.content[url] != "undefined" && typeof state.timestamps[url] != "undefined" && !_this.isDataExpired(state.timestamps[url])) {
+            resolve(state.content[url].data);
+          } else {
+            axios.get(url).then(function (response) {
+              if (response.status == 200) {
+                state.content[url] = response.data;
+                state.timestamps[url] = new Date().getTime();
+                resolve(state.content[url]);
+              } else {
+                reject(response);
+              }
+            });
+          }
+        });
+      }
+    };
   }
-});
+
+  return ContentManager;
+}();
 
 /***/ }),
 

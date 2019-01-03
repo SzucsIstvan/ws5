@@ -9,6 +9,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-material-design-icons/scss/material-icons';
+@import '~nprogress/nprogress.css';
 
 @mixin md-icon-size($size: 24px) {
   font-size: $size;

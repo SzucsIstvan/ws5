@@ -29,8 +29,8 @@
                 <news-item-magazine :news="news" v-if="view === 'magazine'"></news-item-magazine>
             </transition>
         </div>
-
     </div>
+
 </template>
 <script>
 
@@ -39,7 +39,7 @@ import NewsItemBrick from "./newstypes/NewsItemBrick";
 import NewsItemMagazine from "./newstypes/NewsItemMagazine";
 import mixins from "../routes/getterMixins";
 
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
     mixins: [mixins],
@@ -56,15 +56,12 @@ export default {
         NewsItemMagazine
     },
     methods: {
-        line() {
-            this.$store.dispatch("viewType/changeView", "line");
-        },
-        brick() {
-            this.$store.dispatch("viewType/changeView", "brick");
-        },
-        magazine() {
-            this.$store.dispatch("viewType/changeView", "magazine");
-        }
+        ...mapMutations({
+            line: "viewType/setLine",
+            brick: "viewType/setBrick",
+            magazine: "viewType/setMagazine"
+        })
+
     },
 
     computed: {

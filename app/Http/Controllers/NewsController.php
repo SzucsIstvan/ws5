@@ -34,7 +34,7 @@ class NewsController extends Controller
 
         $data = json_encode([ $this->_getTrimmedUri() => $news]);
 
-        return view("news/default", compact("data", "news"));
+        return view("news/default", compact("data"));
     }
 
     /**

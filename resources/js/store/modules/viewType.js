@@ -27,6 +27,7 @@ export default {
     },
     getters: {
         getType(state) {
+            localStorage.viewType = state.type;
             return state.type;
         }
     },
@@ -55,7 +56,6 @@ export default {
             if (viewType == "magazine") {
                 commit("setMagazine");
             }
-
         },
     }
 }

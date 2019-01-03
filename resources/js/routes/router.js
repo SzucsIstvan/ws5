@@ -15,10 +15,22 @@ const routes = [
         meta: { store: "news/getData" },
     },
     {
+        path: '/home',
+        component: require('../components/NewsIndex.vue').default,
+        meta: { store: "news/getData" },
+    },
+    {
         path: '/news/:slug/show',
         component: require('../components/NewsContent.vue').default,
         meta: { store: "newscontent/getData"}
     },
+
+    {
+        path: '/login',
+        component: require('../components/Login.vue').default,
+        props: {"loginUrl": "/login"}
+    },
+
 ]
 
 const router = new VueRouter({
@@ -41,14 +53,22 @@ router.beforeEach((to, from, next) => {
   // If this isn't an initial page load.
   if (to.path) {
       // Start the route progress bar.
+
       NProgress.start()
   }
+
+  if (to.matched.length > 0) {
+    $("#not-vue").remove();
+  }
+
+
   next()
-})
+});
 
 router.afterEach((to, from) => {
   // Complete the animation of the route progress bar.
   NProgress.done()
-})
+});
+
 
 export default router;

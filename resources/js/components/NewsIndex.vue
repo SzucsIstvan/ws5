@@ -65,7 +65,7 @@ export default {
 
     computed: {
         news() {
-            return this.$store.getters["news/newsByUrl"](this.$route.path);
+            return this.$store.getters["news/contentByUrl"](this.$route.path);
         },
         ...mapGetters({
             view: "viewType/getType",

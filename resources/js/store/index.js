@@ -2,8 +2,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import viewType from "./modules/viewType";
-import news from "./modules/news";
-import newscontent from "./modules/newscontent";
+import news from "./modules/content";
+import newscontent from "./modules/content";
 
 Vue.use(Vuex)
 
@@ -13,7 +13,7 @@ export default new Vuex.Store({
   modules: {
     viewType,
     news,
-    newscontent
+    newscontent,
   },
   // strict: debug,
   // plugins: debug ? [createLogger()] : []

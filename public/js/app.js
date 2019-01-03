@@ -1872,7 +1872,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({
     news: function news() {
-      return this.$store.getters["news/newsByUrl"](this.$route.path);
+      return this.$store.getters["news/contentByUrl"](this.$route.path);
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])({
     view: "viewType/getType"
@@ -52566,8 +52566,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_viewType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/viewType */ "./resources/js/store/modules/viewType.js");
-/* harmony import */ var _modules_news__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/news */ "./resources/js/store/modules/news.js");
-/* harmony import */ var _modules_newscontent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/newscontent */ "./resources/js/store/modules/newscontent.js");
+/* harmony import */ var _modules_content__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/content */ "./resources/js/store/modules/content.js");
 
 
 
@@ -52578,8 +52577,8 @@ var debug = "development" !== 'production';
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     viewType: _modules_viewType__WEBPACK_IMPORTED_MODULE_2__["default"],
-    news: _modules_news__WEBPACK_IMPORTED_MODULE_3__["default"],
-    newscontent: _modules_newscontent__WEBPACK_IMPORTED_MODULE_4__["default"]
+    news: _modules_content__WEBPACK_IMPORTED_MODULE_3__["default"],
+    newscontent: _modules_content__WEBPACK_IMPORTED_MODULE_3__["default"]
   } // strict: debug,
   // plugins: debug ? [createLogger()] : []
 
@@ -52587,65 +52586,10 @@ var debug = "development" !== 'production';
 
 /***/ }),
 
-/***/ "./resources/js/store/modules/news.js":
-/*!********************************************!*\
-  !*** ./resources/js/store/modules/news.js ***!
-  \********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ({
-  namespaced: true,
-  state: {
-    news: {}
-  },
-  getters: {
-    news: function news(state) {
-      return state.news;
-    },
-    newsByUrl: function newsByUrl(state) {
-      return function (url) {
-        // return state.news.filter()
-        if (typeof state.news[url] != "undefined") {
-          return state.news[url];
-        } else {
-          return [];
-        }
-      };
-    }
-  },
-  mutations: {
-    setNews: function setNews() {}
-  },
-  actions: {
-    getData: function getData(_ref, url) {
-      var state = _ref.state;
-      return new Promise(function (resolve, reject) {
-        if (typeof state.news[url] != "undefined" && state.news[url].length > 0) {
-          resolve(state.news[url]);
-        } else {
-          axios.get(url).then(function (response) {
-            if (response.status == 200) {
-              state.news[url] = response.data;
-              resolve(state.news[url]);
-            } else {
-              reject(response);
-            }
-          });
-        }
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/store/modules/newscontent.js":
-/*!***************************************************!*\
-  !*** ./resources/js/store/modules/newscontent.js ***!
-  \***************************************************/
+/***/ "./resources/js/store/modules/content.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store/modules/content.js ***!
+  \***********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 

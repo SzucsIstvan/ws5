@@ -14,6 +14,11 @@ class NewsController extends Controller
 
     }
 
+    private function _getTrimmedUri()
+    {
+        return "/".ltrim(request()->path(), "/");
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +32,9 @@ class NewsController extends Controller
             return response()->json($news);
         }
 
-        return view("news/index", ["news" => $news]);
+        $data = json_encode([ $this->_getTrimmedUri() => $news]);
+
+        return view("news/default", compact("data", "news"));
     }
 
     /**
@@ -63,8 +70,11 @@ class NewsController extends Controller
         if (request()->expectsJson()) {
             return response()->json($news);
         }
+        $data = null;
 
-        return view("news.index", compact("news"));
+        $data = json_encode([$this->_getTrimmedUri() => $news]);
+
+        return view("news/default", compact("data", "news"));
 
     }
 

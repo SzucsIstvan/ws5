@@ -52570,8 +52570,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
- // const news = new ContentManager();
-// const newscontent = new ContentManager();
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var debug = "development" !== 'production';
@@ -52579,7 +52577,7 @@ var debug = "development" !== 'production';
   modules: {
     viewType: _modules_viewType__WEBPACK_IMPORTED_MODULE_2__["default"],
     news: new _modules_content__WEBPACK_IMPORTED_MODULE_3__["ContentManager"](60),
-    newscontent: new _modules_content__WEBPACK_IMPORTED_MODULE_3__["ContentManager"](0)
+    newscontent: new _modules_content__WEBPACK_IMPORTED_MODULE_3__["ContentManager"](5)
   } // strict: debug,
   // plugins: debug ? [createLogger()] : []
 
@@ -52604,10 +52602,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 /**
- * Time in seconds
- * @type {Number}
- */
+* Default expiration time in seconds
+* @type {Number}
+*/
 var expirationTime = 60;
+var baseData = window.__data;
 var ContentManager =
 /*#__PURE__*/
 function () {
@@ -52622,9 +52621,15 @@ function () {
       return this.expirationTime * 1000;
     }
   }, {
+    key: "haveBaseData",
+    value: function haveBaseData(state, url) {
+      var ret = typeof baseData != "undefined" && typeof baseData[url] != "undefined" && typeof state.content[url] == "undefined";
+      return ret;
+    }
+  }, {
     key: "isDataExpired",
-    value: function isDataExpired(timestamp) {
-      return !(timestamp + this.expTimeInMilis() >= this.getCurrenTimestamp());
+    value: function isDataExpired(state, url) {
+      return !(typeof state.content[url] != "undefined" && typeof state.timestamps[url] != "undefined" && state.timestamps[url] + this.expTimeInMilis() >= this.getCurrenTimestamp());
     }
   }]);
 
@@ -52659,8 +52664,12 @@ function () {
       getData: function getData(_ref, url) {
         var state = _ref.state;
         return new Promise(function (resolve, reject) {
-          if (typeof state.content[url] != "undefined" && typeof state.timestamps[url] != "undefined" && !_this.isDataExpired(state.timestamps[url])) {
-            resolve(state.content[url].data);
+          if (_this.haveBaseData(state, url)) {
+            state.content[url] = baseData[url];
+            state.timestamps[url] = new Date().getTime();
+            resolve(state.content[url]);
+          } else if (!_this.isDataExpired(state, url)) {
+            resolve(state.content[url]);
           } else {
             axios.get(url).then(function (response) {
               if (response.status == 200) {

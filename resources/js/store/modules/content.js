@@ -1,8 +1,9 @@
 /**
- * Time in seconds
- * @type {Number}
- */
+* Default expiration time in seconds
+* @type {Number}
+*/
 const expirationTime = 60;
+const baseData = window.__data;
 
 export class ContentManager {
 
@@ -14,8 +15,21 @@ export class ContentManager {
         return this.expirationTime * 1000;
     }
 
-    isDataExpired(timestamp) {
-        return !((timestamp + this.expTimeInMilis()) >= this.getCurrenTimestamp());
+    haveBaseData(state, url) {
+
+        let ret = (typeof baseData != "undefined" &&
+        typeof baseData[url] != "undefined" &&
+        typeof state.content[url] == "undefined");
+
+        return ret;
+    }
+
+    isDataExpired(state, url) {
+        return !(
+            typeof state.content[url] != "undefined" &&
+            typeof state.timestamps[url] != "undefined" &&
+            (state.timestamps[url] + this.expTimeInMilis()) >= this.getCurrenTimestamp()
+        )
     }
 
     constructor (expTime) {
@@ -45,7 +59,6 @@ export class ContentManager {
 
                 };
             }
-
         },
 
         this.actions = {
@@ -53,10 +66,16 @@ export class ContentManager {
 
                 return new Promise((resolve, reject) => {
 
-                    if (typeof state.content[url] != "undefined" &&
-                        typeof state.timestamps[url] != "undefined" &&
-                        !_this.isDataExpired(state.timestamps[url])) {
-                        resolve(state.content[url].data);
+                    if (_this.haveBaseData(state, url)) {
+
+                        state.content[url] = baseData[url];
+                        state.timestamps[url] = new Date().getTime();
+                        resolve(state.content[url]);
+
+                    } else if (!_this.isDataExpired(state, url)) {
+
+                        resolve(state.content[url]);
+
                     } else {
                         axios.get(url).then((response) => {
                             if (response.status == 200) {

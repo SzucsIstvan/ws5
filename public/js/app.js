@@ -1763,6 +1763,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _routes_getterMixins__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routes/getterMixins */ "./resources/js/routes/getterMixins.js");
 //
 //
 //
@@ -1779,18 +1780,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      news: {}
-    };
-  },
-  mounted: function mounted() {
-    var _this = this;
 
-    axios.get("/news/" + this.$route.params.slug + "/show").then(function (response) {
-      _this.news = response.data;
-    });
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_routes_getterMixins__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  computed: {
+    news: function news() {
+      return this.$store.getters["newscontent/contentByUrl"](this.$route.path);
+    }
   }
 });
 
@@ -1808,7 +1804,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _newstypes_NewsItemLine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./newstypes/NewsItemLine */ "./resources/js/components/newstypes/NewsItemLine.vue");
 /* harmony import */ var _newstypes_NewsItemBrick__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./newstypes/NewsItemBrick */ "./resources/js/components/newstypes/NewsItemBrick.vue");
 /* harmony import */ var _newstypes_NewsItemMagazine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./newstypes/NewsItemMagazine */ "./resources/js/components/newstypes/NewsItemMagazine.vue");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _routes_getterMixins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../routes/getterMixins */ "./resources/js/routes/getterMixins.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1847,11 +1844,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_routes_getterMixins__WEBPACK_IMPORTED_MODULE_3__["default"]],
   data: function data() {
     return {
-      news: [] // view: this.$store.getters.getType,
-
+      // news: [],
+      loading: false,
+      url: ""
     };
   },
   components: {
@@ -1861,28 +1861,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   methods: {
     line: function line() {
-      // this.view = "line";
       this.$store.dispatch("viewType/changeView", "line");
     },
     brick: function brick() {
-      // this.view = "brick";
       this.$store.dispatch("viewType/changeView", "brick");
     },
     magazine: function magazine() {
-      // this.view = "magazine";
       this.$store.dispatch("viewType/changeView", "magazine");
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])({
+  computed: _objectSpread({
+    news: function news() {
+      return this.$store.getters["news/newsByUrl"](this.$route.path);
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])({
     view: "viewType/getType"
-  })),
-  mounted: function mounted() {
-    var _this = this;
-
-    axios.get("/news").then(function (response) {
-      _this.news = response.data;
-    });
-  }
+  }))
 });
 
 /***/ }),
@@ -1980,9 +1974,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['news'],
   computed: {
-    // mainNews() {
-    //     return this.news[0];
-    // },
+    mainNews: function mainNews() {
+      return this.news[0];
+    },
     otherNews: function otherNews() {
       return this.news.slice(1);
     }
@@ -36882,104 +36876,107 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v("News")]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "card" },
-      [
-        _c("div", { staticClass: "card-header" }, [
-          _c(
-            "ul",
-            {
-              staticClass: "nav nav-pills card-header-pills justify-content-end"
-            },
-            [
-              _c("li", { staticClass: "nav-item" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    class: _vm.view === "line" ? "active" : "",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.line($event)
-                      }
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "mdi md-24" }, [
-                      _vm._v("view_headline")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "nav-item" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    class: _vm.view === "brick" ? "active" : "",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.brick($event)
-                      }
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "mdi md-24" }, [
-                      _vm._v("view_module")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("li", { staticClass: "nav-item" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "nav-link",
-                    class: _vm.view === "magazine" ? "active" : "",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.magazine($event)
-                      }
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "mdi md-24" }, [
-                      _vm._v("view_quilt")
-                    ])
-                  ]
-                )
-              ])
-            ]
-          )
-        ]),
+  return !_vm.loading
+    ? _c("div", [
+        _c("h2", [_vm._v("News")]),
         _vm._v(" "),
-        _vm.view === "line"
-          ? _c("news-item-line", { attrs: { news: _vm.news } })
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.view === "brick"
-          ? _c("news-item-brick", { attrs: { news: _vm.news } })
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.view === "magazine"
-          ? _c("news-item-magazine", { attrs: { news: _vm.news } })
-          : _vm._e()
-      ],
-      1
-    )
-  ])
+        _c(
+          "div",
+          { staticClass: "card" },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _c(
+                "ul",
+                {
+                  staticClass:
+                    "nav nav-pills card-header-pills justify-content-end"
+                },
+                [
+                  _c("li", { staticClass: "nav-item" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-link",
+                        class: _vm.view === "line" ? "active" : "",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.line($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "mdi md-24" }, [
+                          _vm._v("view_headline")
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "nav-item" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-link",
+                        class: _vm.view === "brick" ? "active" : "",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.brick($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "mdi md-24" }, [
+                          _vm._v("view_module")
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "nav-item" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "nav-link",
+                        class: _vm.view === "magazine" ? "active" : "",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.magazine($event)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "mdi md-24" }, [
+                          _vm._v("view_quilt")
+                        ])
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _vm.view === "line"
+              ? _c("news-item-line", { attrs: { news: _vm.news } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.view === "brick"
+              ? _c("news-item-brick", { attrs: { news: _vm.news } })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.view === "magazine"
+              ? _c("news-item-magazine", { attrs: { news: _vm.news } })
+              : _vm._e()
+          ],
+          1
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37116,26 +37113,26 @@ var render = function() {
         "router-link",
         {
           staticClass: "card bg-dark text-white",
-          attrs: { to: _vm.news[0].uri }
+          attrs: { to: _vm.mainNews.uri }
         },
         [
           _c("img", {
             staticClass: "card-img",
-            attrs: { src: _vm.news[0].picture_url, alt: "Card image" }
+            attrs: { src: _vm.mainNews.picture_url, alt: "Card image" }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "card-img-overlay" }, [
             _c("h5", { staticClass: "card-title" }, [
-              _vm._v(_vm._s(_vm.news[0].title))
+              _vm._v(_vm._s(_vm.mainNews.title))
             ]),
             _vm._v(" "),
             _c("p", {
               staticClass: "card-text",
-              domProps: { innerHTML: _vm._s(_vm.news[0].description) }
+              domProps: { innerHTML: _vm._s(_vm.mainNews.description) }
             }),
             _vm._v(" "),
             _c("p", { staticClass: "card-text" }, [
-              _vm._v("Last updated " + _vm._s(_vm.news[0].updated_at))
+              _vm._v("Last updated " + _vm._s(_vm.mainNews.updated_at))
             ])
           ])
         ]
@@ -52074,8 +52071,8 @@ var router = __webpack_require__(/*! ./routes/router */ "./resources/js/routes/r
 
 
 var app = new Vue({
-  router: router,
   store: _store__WEBPACK_IMPORTED_MODULE_0__["default"],
+  router: router,
   el: '#app'
 });
 
@@ -52484,6 +52481,27 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/routes/getterMixins.js":
+/*!*********************************************!*\
+  !*** ./resources/js/routes/getterMixins.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+    _store__WEBPACK_IMPORTED_MODULE_0__["default"].dispatch(to.meta.store, to.path).then(function (data) {
+      return next();
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/routes/router.js":
 /*!***************************************!*\
   !*** ./resources/js/routes/router.js ***!
@@ -52498,29 +52516,38 @@ __webpack_require__.r(__webpack_exports__);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [{
   path: '/',
-  component: __webpack_require__(/*! ../components/NewsIndex.vue */ "./resources/js/components/NewsIndex.vue").default
+  component: __webpack_require__(/*! ../components/NewsIndex.vue */ "./resources/js/components/NewsIndex.vue").default,
+  meta: {
+    store: "news/getData"
+  }
 }, {
   path: '/news',
-  component: __webpack_require__(/*! ../components/NewsIndex.vue */ "./resources/js/components/NewsIndex.vue").default
+  component: __webpack_require__(/*! ../components/NewsIndex.vue */ "./resources/js/components/NewsIndex.vue").default,
+  meta: {
+    store: "news/getData"
+  }
 }, {
   path: '/news/:slug/show',
-  component: __webpack_require__(/*! ../components/NewsContent.vue */ "./resources/js/components/NewsContent.vue").default
+  component: __webpack_require__(/*! ../components/NewsContent.vue */ "./resources/js/components/NewsContent.vue").default,
+  meta: {
+    store: "newscontent/getData"
+  }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   mode: 'history',
-  routes: routes,
-  // short for `routes: routes`
-  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      console.log("scrollBehavior", savedPosition);
-      return savedPosition;
-    } else {
-      return {
-        x: 0,
-        y: 0
-      };
-    }
-  }
+  routes: routes // short for `routes: routes`
+  // scrollBehavior (to, from, savedPosition) {
+  //     // return new Promise((resolve, reject) => {
+  //     //     setTimeout(() => {
+  //     //         if (savedPosition) {
+  //     //             resolve(savedPosition);
+  //     //         } else {
+  //     //             resolve({ x: 0, y: 0 })
+  //     //         }
+  //     //     }, 500);
+  //     // })
+  // }
+
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
@@ -52539,6 +52566,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_viewType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/viewType */ "./resources/js/store/modules/viewType.js");
+/* harmony import */ var _modules_news__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/news */ "./resources/js/store/modules/news.js");
+/* harmony import */ var _modules_newscontent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/newscontent */ "./resources/js/store/modules/newscontent.js");
+
+
 
 
 
@@ -52546,11 +52577,116 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 var debug = "development" !== 'production';
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
-    viewType: _modules_viewType__WEBPACK_IMPORTED_MODULE_2__["default"]
+    viewType: _modules_viewType__WEBPACK_IMPORTED_MODULE_2__["default"],
+    news: _modules_news__WEBPACK_IMPORTED_MODULE_3__["default"],
+    newscontent: _modules_newscontent__WEBPACK_IMPORTED_MODULE_4__["default"]
   } // strict: debug,
   // plugins: debug ? [createLogger()] : []
 
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/news.js":
+/*!********************************************!*\
+  !*** ./resources/js/store/modules/news.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: {
+    news: {}
+  },
+  getters: {
+    news: function news(state) {
+      return state.news;
+    },
+    newsByUrl: function newsByUrl(state) {
+      return function (url) {
+        // return state.news.filter()
+        if (typeof state.news[url] != "undefined") {
+          return state.news[url];
+        } else {
+          return [];
+        }
+      };
+    }
+  },
+  mutations: {
+    setNews: function setNews() {}
+  },
+  actions: {
+    getData: function getData(_ref, url) {
+      var state = _ref.state;
+      return new Promise(function (resolve, reject) {
+        if (typeof state.news[url] != "undefined" && state.news[url].length > 0) {
+          resolve(state.news[url]);
+        } else {
+          axios.get(url).then(function (response) {
+            if (response.status == 200) {
+              state.news[url] = response.data;
+              resolve(state.news[url]);
+            } else {
+              reject(response);
+            }
+          });
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/newscontent.js":
+/*!***************************************************!*\
+  !*** ./resources/js/store/modules/newscontent.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: {
+    content: {}
+  },
+  getters: {
+    contentByUrl: function contentByUrl(state) {
+      return function (url) {
+        if (typeof state.content[url] != "undefined") {
+          return state.content[url];
+        } else {
+          return {};
+        }
+      };
+    }
+  },
+  actions: {
+    getData: function getData(_ref, url) {
+      var state = _ref.state;
+      return new Promise(function (resolve, reject) {
+        if (typeof state.content[url] != "undefined") {
+          resolve(state.content[url]);
+        } else {
+          axios.get(url).then(function (response) {
+            if (response.status == 200) {
+              state.content[url] = response.data;
+              resolve(state.content[url]);
+            } else {
+              reject(response);
+            }
+          });
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -52563,10 +52699,31 @@ var debug = "development" !== 'production';
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var values = ["line", "brick", "magazine"];
+var defIdx = 1;
+
+function getViewTypeFromLocalStorage() {
+  var flag = false;
+
+  if (localStorage.viewType) {
+    for (var i = 0; i < values.length; i++) {
+      if (localStorage.viewType == values[i]) {
+        flag = true;
+      }
+    }
+  }
+
+  if (!flag) {
+    localStorage.viewType = values[defIdx];
+  }
+
+  return flag ? localStorage.viewType : values[defIdx];
+}
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,
   state: {
-    type: "line"
+    type: getViewTypeFromLocalStorage()
   },
   getters: {
     getType: function getType(state) {
@@ -52576,12 +52733,15 @@ __webpack_require__.r(__webpack_exports__);
   mutations: {
     setLine: function setLine(state) {
       state.type = "line";
+      localStorage.viewType = state.type;
     },
     setBrick: function setBrick(state) {
       state.type = "brick";
+      localStorage.viewType = state.type;
     },
     setMagazine: function setMagazine(state) {
       state.type = "magazine";
+      localStorage.viewType = state.type;
     }
   },
   actions: {

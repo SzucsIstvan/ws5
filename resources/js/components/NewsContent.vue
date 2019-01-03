@@ -15,18 +15,16 @@
         </div>
 </template>
 <script>
+import mixins from "../routes/getterMixins";
+
 export default {
+    mixins: [mixins],
 
-    data() {
-        return {
-            news: {},
-        }
+    computed: {
+        news() {
+            return this.$store.getters["newscontent/contentByUrl"](this.$route.path);
+        },
     },
 
-    mounted() {
-        axios.get("/news/" + this.$route.params.slug + "/show").then((response) => {
-            this.news = response.data;
-        });
-    },
 }
 </script>

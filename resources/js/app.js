@@ -35,7 +35,7 @@ const router = require("./routes/router").default;
 import store from './store';
 
 const app = new Vue({
-    router,
     store,
+    router,
     el: '#app'
 });

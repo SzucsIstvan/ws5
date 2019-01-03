@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="!loading">
         <h2>News</h2>
         <div class="card">
             <div class="card-header">
@@ -33,15 +33,17 @@
 import NewsItemLine from "./newstypes/NewsItemLine";
 import NewsItemBrick from "./newstypes/NewsItemBrick";
 import NewsItemMagazine from "./newstypes/NewsItemMagazine";
+import mixins from "../routes/getterMixins";
 
 import { mapGetters } from "vuex";
 
 export default {
-
+    mixins: [mixins],
     data() {
         return {
-            news: [],
-            // view: this.$store.getters.getType,
+            // news: [],
+            loading: false,
+            url: ""
         }
     },
     components: {
@@ -51,26 +53,24 @@ export default {
     },
     methods: {
         line() {
-            // this.view = "line";
             this.$store.dispatch("viewType/changeView", "line");
         },
         brick() {
-            // this.view = "brick";
             this.$store.dispatch("viewType/changeView", "brick");
         },
         magazine() {
-            // this.view = "magazine";
             this.$store.dispatch("viewType/changeView", "magazine");
         }
     },
-    computed: {
-        ...mapGetters({view: "viewType/getType"}),
-    },
-    mounted() {
-        axios.get("/news").then((response) => {
 
-            this.news = response.data;
-        });
+    computed: {
+        news() {
+            return this.$store.getters["news/newsByUrl"](this.$route.path);
+        },
+        ...mapGetters({
+            view: "viewType/getType",
+        }),
     },
+
 }
 </script>
